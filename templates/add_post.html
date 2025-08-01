@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+  .form-wrapper {
+    max-width: 600px;
+    margin: 0 auto;
+    background-color: #ffffff;
+    padding: 40px;
+    border-radius: 12px;
+    border: 1px solid #dcdcdc;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+  }
+
+  .form-wrapper h3 {
+    font-weight: 700;
+    margin-bottom: 30px;
+    text-align: center;
+    font-size: 24px;
+  }
+
+  .form-wrapper label {
+    font-weight: 500;
+    margin-top: 18px;
+    display: block;
+    color: #333;
+  }
+
+  .form-wrapper input,
+  .form-wrapper select,
+  .form-wrapper textarea {
+    width: 100%;
+    padding: 10px 14px;
+    border-radius: 6px;
+    border: 1px solid #bbb;
+    margin-top: 8px;
+    font-size: 15px;
+    background-color: #fefefe;
+  }
+
+  .form-wrapper button {
+    margin-top: 30px;
+    width: 100%;
+    padding: 12px;
+    font-weight: 600;
+    font-size: 16px;
+    border-radius: 6px;
+  }
+</style>
+
+<div class="container pt-5">
+  <div class="form-wrapper">
+    <h3>📤 Admin: Post qo‘shish</h3>
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+      
+        <div class="mb-3">
+          <label for="id_user">👤 Foydalanuvchi:</label>
+          {{ form.user }}
+        </div>
+      
+        <div class="mb-3">
+          <label for="id_image">🖼 Rasm:</label>
+          {{ form.image }}
+        </div>
+      
+        <div class="mb-3">
+          <label for="id_caption">📝 Izoh:</label>
+          {{ form.caption }}
+        </div>
+      
+        <button class="btn btn-primary w-100" type="submit">Post qo‘shish</button>
+      </form>
+      
+  </div>
+</div>
+{% endblock %}

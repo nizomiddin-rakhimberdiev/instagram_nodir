@@ -1,0 +1,5 @@
+django
+pillow
+django-jazzmin
+gunicorn
+whitenoise

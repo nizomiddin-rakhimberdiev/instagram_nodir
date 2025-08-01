@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-4">
+  <div class="d-flex align-items-center mb-4">
+    <a href="{% url 'home' %}" class="btn btn-outline-secondary me-3">&larr;</a>
+    <h4 class="m-0" style="color: #262626;">Instagram</h4>
+  </div>
+
+  <div class="row">
+    <div class="col-md-3 text-center">
+      {% if request.user.avatar %}
+        <img src="{{ request.user.avatar.url }}" class="rounded-circle img-fluid" style="width: 150px; height: 150px; object-fit: cover;">
+      {% else %}
+        <img src="{% static 'images/default_avatar.png' %}" class="rounded-circle img-fluid" style="width: 150px; height: 150px; object-fit: cover;">
+      {% endif %}
+    </div>
+    <div class="col-md-9">
+      <h4>{{ request.user.username }}</h4>
+      <div class="d-flex align-items-center gap-4 mt-2">
+        <span><strong>{{ posts.count }}</strong> posts</span>
+      </div>
+      <a href="{% url 'edit_profile' %}" class="btn btn-outline-dark mt-3">Edit Profile</a>
+    </div>
+  </div>
+
+  <hr class="my-4">
+
+  <div class="row">
+    {% for post in posts %}
+      <div class="col-4 mb-4">
+        <a href="{% url 'post_detail' post.id %}">
+          {% if post.image %}
+            <img src="{{ post.image.url }}" class="img-fluid" style="height: 300px; object-fit: cover;">
+          {% elif post.video %}
+            <video src="{{ post.video.url }}" class="img-fluid" style="height: 300px; object-fit: cover;" muted></video>
+          {% else %}
+            <div class="bg-secondary text-white p-5 text-center">No media</div>
+          {% endif %}
+        </a>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

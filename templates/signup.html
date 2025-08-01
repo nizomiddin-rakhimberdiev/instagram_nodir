@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+  body {
+    background-color: #fafafa;
+  }
+
+  .auth-box {
+    max-width: 400px;
+    margin: auto;
+    padding: 40px;
+    border: 1px solid #dbdbdb;
+    border-radius: 12px;
+    background-color: #ffffff;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  }
+
+  .instagram-logo {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 40px;
+    font-weight: 700;
+    color: #262626;
+    text-align: center;
+    margin-bottom: 30px;
+  }
+
+  .btn-success {
+    background-color: #28a745;
+    border-color: #28a745;
+  }
+
+  .btn-success:hover {
+    background-color: #218838;
+    border-color: #1e7e34;
+  }
+
+  .auth-link {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 14px;
+    color: #8e8e8e;
+  }
+
+  .auth-link a {
+    color: #0095f6;
+    font-weight: bold;
+    text-decoration: none;
+  }
+
+  .errorlist {
+    color: red;
+    list-style: none;
+    padding-left: 0;
+    margin-bottom: 10px;
+  }
+</style>
+
+<div class="container mt-5">
+  <div class="auth-box">
+    <div class="instagram-logo">Instagram</div>
+
+    <form method="post">
+      {% csrf_token %}
+
+      {# Show form-wide errors (non-field errors) #}
+      {% if form.non_field_errors %}
+        <ul class="errorlist">
+          {% for error in form.non_field_errors %}
+            <li>{{ error }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+
+      {# Field-specific errors and fields #}
+      {% for field in form %}
+        <div class="mb-3">
+          {{ field.label_tag }}
+          {{ field }}
+          {% if field.errors %}
+            <ul class="errorlist">
+              {% for error in field.errors %}
+                <li>{{ error }}</li>
+              {% endfor %}
+            </ul>
+          {% endif %}
+        </div>
+      {% endfor %}
+
+      <button type="submit" class="btn btn-success w-100">Sign Up</button>
+    </form>
+
+    <div class="auth-link">
+      Already have an account? <a href="{% url 'login' %}">Log in</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

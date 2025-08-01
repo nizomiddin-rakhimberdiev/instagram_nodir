@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+  body {
+    background-color: #fafafa;
+  }
+
+  .auth-box {
+    max-width: 400px;
+    margin: auto;
+    padding: 40px;
+    border: 1px solid #dbdbdb;
+    border-radius: 12px;
+    background-color: #ffffff;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  }
+
+  .instagram-logo {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 40px;
+    font-weight: 700;
+    color: #262626;
+    text-align: center;
+    margin-bottom: 30px;
+  }
+
+  .btn-primary {
+    background-color: #0095f6;
+    border-color: #0095f6;
+  }
+
+  .btn-primary:hover {
+    background-color: #007dc1;
+    border-color: #007dc1;
+  }
+
+  .auth-link {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 14px;
+    color: #8e8e8e;
+  }
+
+  .auth-link a {
+    color: #0095f6;
+    font-weight: bold;
+    text-decoration: none;
+  }
+
+  .alert-info {
+    background-color: #e6f3ff;
+    color: #0366d6;
+    font-weight: 500;
+    border: none;
+  }
+</style>
+
+<div class="container mt-5">
+  <div class="auth-box">
+    <div class="instagram-logo">Instagram</div>
+
+    <form method="post">
+      {% csrf_token %}
+
+      {% if form.non_field_errors %}
+        <div class="alert alert-danger">
+          {% for error in form.non_field_errors %}
+            {{ error }}
+          {% endfor %}
+        </div>
+      {% endif %}
+
+      {{ form.as_p }}
+
+      <button type="submit" class="btn btn-primary w-100">Log In</button>
+    </form>
+
+    {% if user.is_authenticated %}
+      <div class="alert alert-info text-center mt-3">
+        👋 Welcome back, {{ user.username }}!
+      </div>
+    {% endif %}
+
+    <div class="auth-link">
+      Don't have an account? <a href="{% url 'signup' %}">Sign up</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

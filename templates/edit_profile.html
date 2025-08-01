@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+  .profile-edit-container {
+    max-width: 500px;
+    margin: 80px auto; /* navbardan pastroqqa */
+    background-color: #fff;
+    padding: 30px;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  }
+
+  .form-label {
+    font-weight: 600;
+    margin-bottom: 5px;
+  }
+
+  .form-control {
+    border-radius: 8px;
+  }
+
+  .form-control:focus {
+    box-shadow: 0 0 0 0.15rem rgba(0, 123, 255, 0.25);
+    border-color: #80bdff;
+  }
+
+  .current-avatar {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+
+  .current-avatar img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #ddd;
+  }
+</style>
+
+<div class="container">
+  <div class="profile-edit-container">
+    <h3 class="text-center mb-4">🛠 Profilni tahrirlash</h3>
+
+    {% if user.profile.avatar %}
+      <div class="current-avatar">
+        <img src="{{ user.profile.avatar.url }}" alt="Avatar">
+      </div>
+    {% endif %}
+
+    <form method="POST" enctype="multipart/form-data">
+      {% csrf_token %}
+
+      <div class="mb-3">
+        <label class="form-label">Username</label>
+        {{ form.username }}
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Bio</label>
+        {{ form.bio }}
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Avatar (Yangi)</label>
+        {{ form.avatar }}
+      </div>
+
+      <div class="d-grid">
+        <button type="submit" class="btn btn-success btn-lg">💾 Saqlash</button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

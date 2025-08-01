@@ -1,0 +1,371 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+
+<style>
+ 
+  body {
+    background-color: #fafafa;
+  }
+
+  /* Navbar va sahifa tepasi uchun padding */
+  .top-padding {
+    padding-top: 80px; /* navbar balandligi + oraliq */
+  }
+
+  /* Stories bar */
+  .story-bar {
+    display: flex;
+    gap: 15px;
+    overflow-x: auto;
+    padding: 10px 15px 10px 10px;
+    background-color: #fff;
+    border: 1px solid #dbdbdb;
+    border-radius: 10px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+    scrollbar-width: none;
+  }
+  .story-bar::-webkit-scrollbar {
+    display: none;
+  }
+  
+  .story-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 70px;
+    flex-shrink: 0;
+    text-align: center;
+  }
+  
+  .story-avatar-wrapper {
+    padding: 2px;
+    background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+    border-radius: 50%;
+    display: inline-block;
+  }
+  
+  .story-img {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid white;
+    background-color: #fff;
+  }
+  
+  .story-username {
+    font-size: 12px;
+    color: #262626;
+    margin-top: 6px;
+    max-width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* Post card */
+  .card {
+    border: 1px solid #dbdbdb;
+    border-radius: 8px;
+    background-color: #fff;
+    margin-bottom: 30px;
+    overflow: hidden;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .card-header {
+    padding: 10px 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background-color: #fff;
+    border-bottom: 1px solid #dbdbdb;
+  }
+
+  .card-header img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+
+  .card-header .username {
+    font-weight: 600;
+  }
+
+  .post-image-wrapper {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+  }
+
+  .post-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .card-body {
+    padding: 10px 15px;
+  }
+
+  /* Like va comment tugmalari */
+  .actions {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 10px;
+  }
+
+  .actions a {
+    text-decoration: none;
+    font-size: 22px;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .actions a.like-btn {
+    color: #ed4956;
+    transition: color 0.3s ease;
+  }
+  .actions a.like-btn.grey {
+    color: grey;
+  }
+  .actions a.like-btn:hover {
+    color: #e0245e;
+  }
+
+  .caption {
+    font-size: 14px;
+    color: #262626;
+    margin-bottom: 8px;
+    white-space: pre-wrap;
+  }
+
+  .comments {
+    font-size: 13px;
+    color: #8e8e8e;
+    margin-top: 6px;
+  }
+
+  /* Follow tugmasi */
+  .follow-btn {
+    margin-left: auto;
+    background-color: #0095f6;
+    color: white;
+    border: none;
+    padding: 5px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background-color 0.3s ease;
+  }
+  .follow-btn:hover:not(:disabled) {
+    background-color: #007acc;
+  }
+
+  .follow-btn.unfollow {
+    background-color: #efefef;
+    color: #262626;
+  }
+  .follow-btn.unfollow:hover:not(:disabled) {
+    background-color: #d5d5d5;
+  }
+
+  .follow-btn:disabled {
+    cursor: default;
+    opacity: 0.6;
+  }
+
+  /* Delete tugmasi */
+  .delete-btn {
+    margin-left: 10px;
+    background-color: transparent;
+    border: none;
+    color: #ed4956;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 16px;
+  }
+
+  /* Comment yozish formasi */
+  .comment-form {
+    display: flex;
+    gap: 8px;
+    margin-top: 10px;
+  }
+  .comment-form input[type="text"] {
+    flex-grow: 1;
+    padding: 6px 10px;
+    font-size: 14px;
+    border-radius: 20px;
+    border: 1px solid #ccc;
+    outline: none;
+    transition: border-color 0.2s ease;
+  }
+  .comment-form input[type="text"]:focus {
+    border-color: #0095f6;
+  }
+  .comment-form button {
+    background-color: #0095f6;
+    color: white;
+    border: none;
+    padding: 6px 16px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background-color 0.3s ease;
+  }
+  .comment-form button:hover {
+    background-color: #007acc;
+  }
+</style>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom shadow-sm fixed-top" style="z-index: 1030;">
+  <div class="container-fluid px-4">
+    <!-- Logo (Left) -->
+    <a class="navbar-brand d-flex align-items-center fw-bold" href="{% url 'home' %}" style="font-family: 'Billabong', cursive; font-size: 2rem;">
+      <i class="bi bi-instagram me-2" style="font-size: 2rem; color: #e1306c;"></i>
+      Instagram
+    </a>
+
+    <!-- Toggle Button (Mobile) -->
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" 
+      aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- Nav Items (Right side) -->
+    <div class="collapse navbar-collapse justify-content-end" id="navbarContent">
+      <ul class="navbar-nav align-items-center gap-3">
+
+        <!-- Messages -->
+        <li class="nav-item">
+          <a class="nav-link text-dark d-flex align-items-center" href="{% url 'messages' %}">
+            <i class="bi bi-chat-dots-fill me-1 fs-5"></i>
+            <span class="fw-semibold d-none d-md-inline">Messages</span>
+          </a>
+        </li>
+
+        <!-- Add Post -->
+        <li class="nav-item">
+          <a class="btn btn-primary px-3 py-1 rounded-pill shadow-sm d-flex align-items-center" href="{% url 'add_post' %}">
+            <i class="bi bi-plus-circle me-1"></i>
+            <span class="d-none d-md-inline">Add Post</span>
+          </a>
+        </li>
+
+        <!-- Profile -->
+        <li class="nav-item">
+          <a class="nav-link text-dark d-flex align-items-center" href="{% url 'profile' request.user.username %}">
+            <i class="bi bi-person-circle me-1 fs-5"></i>
+            <span class="fw-semibold d-none d-md-inline">Profile</span>
+          </a>
+        </li>
+
+        <!-- Logout -->
+        <li class="nav-item">
+          <a class="btn btn-outline-danger px-3 py-1 rounded-pill shadow-sm d-flex align-items-center fw-semibold" href="{% url 'logout' %}">
+            <i class="bi bi-box-arrow-right me-1"></i>
+            <span class="d-none d-md-inline">Logout</span>
+          </a>
+        </li>
+
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- Page Content -->
+<div class="container top-padding">
+
+  <!-- Stories -->
+  <div class="story-bar mb-4">
+    {% for user in users %}
+      <div class="story-item">
+        <div class="story-avatar-wrapper">
+          <img src="{% if user.avatar %}{{ user.avatar.url }}{% else %}https://via.placeholder.com/64x64.png?text=U{% endif %}"
+               class="story-img" alt="{{ user.username }}">
+        </div>
+        <div class="story-username">{{ user.username }}</div>
+      </div>
+    {% endfor %}
+  </div>
+
+  <!-- Posts -->
+  {% for post in posts %}
+  <div class="insta-post card mb-4">
+    
+    <!-- Post Header -->
+    <div class="post-header d-flex align-items-center p-2">
+      <img src="{% if post.user.avatar %}{{ post.user.avatar.url }}{% else %}https://via.placeholder.com/40x40.png?text=U{% endif %}" 
+           alt="{{ post.user.username }}" 
+           class="rounded-circle me-2" width="40" height="40">
+      <strong>{{ post.user.username }}</strong>
+
+      {% if request.user == post.user %}
+      <form method="POST" action="{% url 'delete_post' post.pk %}" class="ms-auto">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-link text-danger p-0" title="Delete Post">&times;</button>
+      </form>
+      {% else %}
+      <button class="btn btn-outline-primary btn-sm ms-auto" disabled>Follow</button>
+      {% endif %}
+    </div>
+
+    <!-- Post Image -->
+    <div class="post-image">
+      <img src="{{ post.image.url }}" alt="Post image" class="w-100">
+    </div>
+
+    <!-- Post Actions -->
+    <div class="post-actions px-3 pt-2">
+      <a href="{% url 'like_post' post.pk %}" 
+         class="like-btn {% if request.user in post.liked_by.all %}text-danger{% else %}text-muted{% endif %}" 
+         style="font-size: 1.5rem; text-decoration: none;">
+        ❤️
+      </a>
+      <span>{{ post.total_likes }} like{{ post.total_likes|pluralize }}</span>
+    </div>
+
+    <!-- Caption -->
+    <div class="caption px-3 pt-2">
+      <strong>{{ post.user.username }}</strong> {{ post.caption }}
+    </div>
+
+    <!-- Comments -->
+    <div class="comments px-3 py-2">
+      {% for comment in post.comments.all|slice:":3" %}
+        <div><strong>{{ comment.user.username }}</strong> {{ comment.content }}</div>
+      {% empty %}
+        <div class="text-muted">No comments yet</div>
+      {% endfor %}
+
+      {% if post.comments.count > 3 %}
+        <a href="{% url 'post_detail' post.pk %}" class="text-secondary">View all comments</a>
+      {% endif %}
+    </div>
+
+    <!-- Comment form -->
+    <form method="POST" action="{% url 'add_comment' post.pk %}" class="comment-form px-3 pb-3 d-flex align-items-center">
+      {% csrf_token %}
+      <input type="text" name="content" class="form-control me-2" placeholder="Add a comment..." required autocomplete="off">
+      <button type="submit" class="btn btn-primary btn-sm">Post</button>
+    </form>
+  </div>
+{% endfor %}
+
+</div>
+
+<!-- Bootstrap CSS (agar base.html da yo'q bo'lsa) -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- Bootstrap JS (body oxirida) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+{% endblock %}
