@@ -261,12 +261,14 @@
         </li>
 
         <!-- Profile -->
+        {% if request.user.is_authenticated %}
         <li class="nav-item">
           <a class="nav-link text-dark d-flex align-items-center" href="{% url 'profile' request.user.username %}">
             <i class="bi bi-person-circle me-1 fs-5"></i>
             <span class="fw-semibold d-none d-md-inline">Profile</span>
           </a>
         </li>
+        {% endif %}
 
         <!-- Logout -->
         <li class="nav-item">
