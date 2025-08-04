@@ -5,9 +5,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Production secret key va debugging sozlamalari
 SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-fallback-key')  # Fallback only for dev
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 # Apps
 INSTALLED_APPS = [
